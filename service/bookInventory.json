@@ -1,0 +1,30 @@
+[
+  {
+    "ISBN": "1",
+    "title": "title1",
+    "author": "genre1",
+    "genre": 1,
+    "publishingYear": 2020
+  },
+  {
+    "ISBN": "2",
+    "title": "title2",
+    "author": "author2",
+    "genre": 2,
+    "publishingYear": 2022
+  },
+  {
+    "ISBN": "3",
+    "title": "title3",
+    "author": "author3",
+    "genre": 3,
+    "publishingYear": 2021
+  },
+  {
+    "ISBN": "4",
+    "title": "title4",
+    "author": "author4",
+    "genre": 4,
+    "publishingYear": 2022
+  }
+]

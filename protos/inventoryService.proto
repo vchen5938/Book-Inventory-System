@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+import "inventory.proto";
+
+service InventoryService {
+    rpc CreateBook (Book) returns (CreateBookResponseStatus) {}
+    rpc GetBook (ISBN) returns (GetBookResponseStatus) {}
+}
