@@ -2,94 +2,88 @@ from concurrent import futures
 import logging
 
 import grpc
-import inventory_pb2
-import inventory_pb2_grpc
 import inventoryService_pb2
 import inventoryService_pb2_grpc
-import json
+import bookInventoryService
+
+SERVER_URL = "[::]:50051"
 
 class InventoryService(inventoryService_pb2_grpc.InventoryServiceServicer):
-    
-    # Validate book input
-    def validateInput(self, request):
-        if request.ISBN == "":
-            return (False, "Book's ISBN is invalid!!!")
-        elif request.title == "":
-            return (False, "Book's title is invalid!!!")
-        elif request.author == "":
-            return (False, "Book's author is invalid!!!")
-        elif request.genre <= 0 or request.genre >= 5:
-            return (False, "Book's genre not available!!!")
-        elif request.publishingYear == 0:
-            return (False, "Book's publishing year is invalid!!!")
-        else:
-            return (True, "Book is valid.")
 
-    # Create a book and add it to database
     def CreateBook(self, request, context):
-        valid, message = self.validateInput(request)
+        """Creates a book and add it to database.
 
-        if not valid:
-            bookResponseStatus = inventory_pb2.BookResponseStatus()
-            bookResponseStatus.statusCode = inventory_pb2.FAILURE
-            bookResponseStatus.message = message
-            return bookResponseStatus
+        Parameters
+        ----------
+        request : book to be created
+        context : server-side context
+
+        Returns
+        ------
+        Successful response with message
+        """
+
+        # check for invalid ISBN
+        if request.ISBN == "":
+            context.set_details("Book's ISBN is invalid!!!")
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return inventoryService_pb2.CreateBookResponse()
         
-        file = open('bookInventory.json')
-        books = json.load(file)
+        # retrieve list of books from database
+        books = bookInventoryService.retrieveListOfBooks()
 
         # check for duplicate ISBNs
         for book in books:
-            if book["ISBN"] == request.ISBN:
-                bookResponseStatus = inventory_pb2.BookResponseStatus()
-                bookResponseStatus.statusCode = inventory_pb2.FAILURE
-                bookResponseStatus.message = "A book with the same ISBN has been created!!!"
-                return bookResponseStatus
+            if book.ISBN == request.ISBN:
+                context.set_details("A book with the same ISBN has been created!!!")
+                context.set_code(grpc.StatusCode.ALREADY_EXISTS)
+                return inventoryService_pb2.CreateBookResponse()
 
-        # create the new book and add it to bookInventory
-        with open("bookInventory.json", "w") as outfile:
-            book = {
-            "ISBN": request.ISBN,
-            "title": request.title,
-            "author": request.author,
-            "genre": request.genre,
-            "publishingYear": request.publishingYear
-            }
-            books.append(book)
-
-            json.dump(books, outfile, indent=4)
+        # store book to database
+        bookInventoryService.storeBooks([request])
         
-        bookResponseStatus = inventory_pb2.BookResponseStatus()
-        bookResponseStatus.statusCode = inventory_pb2.SUCCESS
-        bookResponseStatus.message = "Book created successfully!!!"
-        return bookResponseStatus
+        context.set_code(grpc.StatusCode.OK)
+        return inventoryService_pb2.CreateBookResponse(message="Book created successfully!!!")
     
-    # Get book details if it exists in the database
     def GetBook(self, request, context):
-        file = open('bookInventory.json')
-        books = json.load(file)
+        """Retrieves book details.
+
+        Parameters
+        ----------
+        request : ISBN of book
+        context : server-side context
+
+        Returns
+        ------
+        Successful response with message and book details
+        """
+
+        # check for invalid ISBN
+        if request.ISBN == "":
+            context.set_details("Book's ISBN is invalid!!!")
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return inventoryService_pb2.GetBookResponse()
+
+        # retrieve list of books from database
+        books = bookInventoryService.retrieveListOfBooks()
 
         for book in books:
-            if book["ISBN"] == request.ISBN:
-                bookResponseStatus = inventory_pb2.BookResponseStatus(book=book)
-                bookResponseStatus.statusCode = inventory_pb2.SUCCESS
-                bookResponseStatus.message = "Book info retrieved successfully!!!"
-                return bookResponseStatus
+            if book.ISBN == request.ISBN:
+                context.set_code(grpc.StatusCode.OK)
+                return inventoryService_pb2.GetBookResponse(message= "Book info retrieved successfully!!!", book=book)
 
-        bookResponseStatus = inventory_pb2.BookResponseStatus()
-        bookResponseStatus.statusCode = inventory_pb2.FAILURE
-        bookResponseStatus.message = "Failed to retrieve book info!!!"
-        return bookResponseStatus
+        # failed to find book
+        context.set_details("Failed to retrieve book info!!!")
+        context.set_code(grpc.StatusCode.NOT_FOUND)
+        return inventoryService_pb2.GetBookResponse()
 
 def serve():
-    port = '50051'
+    """Starts gRPC server."""
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     inventoryService_pb2_grpc.add_InventoryServiceServicer_to_server(InventoryService(), server)
-    server.add_insecure_port('[::]:' + port)
+    server.add_insecure_port(SERVER_URL)
     server.start()
-    print("Server started, listening on " + port)
     server.wait_for_termination()
-
 
 if __name__ == '__main__':
     logging.basicConfig()

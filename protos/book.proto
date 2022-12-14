@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// genres of book
+enum Genre {
+    GENRE_UNDEFINED = 0;
+    GENRE_FANTASY = 1;
+    GENRE_SCIENCE_FRICTION = 2;
+    GENRE_MYSTERY = 3;
+    GENRE_HORROR = 4;
+}
+
+message Book {
+  // ISBN of book
+  string ISBN = 1;
+  // title of book
+  string title = 2;
+  // author name of book
+  string author = 3;
+  // genre of book
+  Genre genre = 4;
+  // year the book is published
+  int32 publishingYear = 5;
+}

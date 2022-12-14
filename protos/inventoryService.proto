@@ -1,8 +1,25 @@
 syntax = "proto3";
 
-import "inventory.proto";
+import "book.proto";
 
+// RPCs of inventory service
 service InventoryService {
-    rpc CreateBook (Book) returns (CreateBookResponseStatus) {}
-    rpc GetBook (ISBN) returns (GetBookResponseStatus) {}
+    rpc CreateBook (Book) returns (CreateBookResponse) {}
+    rpc GetBook (GetBookRequest) returns (GetBookResponse) {}
+}
+
+// response type of CreateBook RPC
+message CreateBookResponse {
+    string message = 1;
+}
+
+// request type of GetBook RPC
+message GetBookRequest {
+    string ISBN = 1;
+}
+
+// response type of GetBook RPC
+message GetBookResponse {
+    string message = 1;
+    Book book = 2;
 }

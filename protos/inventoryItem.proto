@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "book.proto";
+
+// status of inventory item
+enum Status {
+    STATUS_UNDEFINED = 0;
+    STATUS_AVAILABLE = 1;
+    STATUS_TAKEN = 2;
+}
+
+message InventoryItem {
+    // inventory number of the item
+    int32 inventoryNumber = 1;
+    // type of inventory item
+    oneof items {
+        Book book = 2;
+    }
+    // item availability
+    Status status = 3;
+}

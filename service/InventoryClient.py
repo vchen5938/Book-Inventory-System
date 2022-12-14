@@ -3,30 +3,34 @@ from __future__ import print_function
 import logging
 
 import grpc
-import inventory_pb2
-import inventory_pb2_grpc
+import book_pb2
+import InventoryServer as server
 import inventoryService_pb2
 import inventoryService_pb2_grpc
 
-serverURL = 'localhost:50051'
+class InventoryClient:
+    def __init__(self):
+        self.serverURL = server.SERVER_URL
 
-def run():
-    with grpc.insecure_channel(serverURL) as channel:
-        stub = inventoryService_pb2_grpc.InventoryServiceStub(channel)
-        response = stub.CreateBook(inventory_pb2.Book(ISBN="12348234923",title="title", author="author", genre=inventory_pb2.GENRE_FANTASY,publishingYear=2022))
+    def run(self):
+        """Integration test for CreateBook and GetBook
+        """
 
-        if (response.statusCode == inventory_pb2.FAILURE):
-            print(response.message)
-            return
-        
-        response = stub.GetBook(inventory_pb2.ISBN(ISBN="12348234923"))
+        with grpc.insecure_channel(self.serverURL) as channel:
+            stub = inventoryService_pb2_grpc.InventoryServiceStub(channel)
+            try:
+                response = stub.CreateBook(book_pb2.Book(ISBN="978-3-16-148410-5", title="The Curious Incident of the Dog in the Night-Time", author="Mark Haddon", genre=book_pb2.GENRE_FANTASY, publishingYear=1995))
 
-        if (response.statusCode == inventory_pb2.FAILURE):
-            print(response.message)
-            return
-        
-        print(response)
+                print(response)
+
+                response = stub.GetBook(inventoryService_pb2.GetBookRequest(ISBN="978-3-16-148410-5"))
+            except grpc.RpcError as e:
+                print(e.details())
+                return
+
+            print(response)
 
 if __name__ == '__main__':
     logging.basicConfig()
-    run()
+    inventoryClient = InventoryClient()
+    inventoryClient.run()

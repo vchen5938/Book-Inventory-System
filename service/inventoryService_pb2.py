@@ -11,16 +11,22 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-import inventory_pb2 as inventory__pb2
+import book_pb2 as book__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16inventoryService.proto\x1a\x0finventory.proto2g\n\x10InventoryService\x12*\n\nCreateBook\x12\x05.Book\x1a\x13.BookResponseStatus\"\x00\x12\'\n\x07GetBook\x12\x05.ISBN\x1a\x13.BookResponseStatus\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16inventoryService.proto\x1a\nbook.proto\"%\n\x12\x43reateBookResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1e\n\x0eGetBookRequest\x12\x0c\n\x04ISBN\x18\x01 \x01(\t\"7\n\x0fGetBookResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x13\n\x04\x62ook\x18\x02 \x01(\x0b\x32\x05.Book2n\n\x10InventoryService\x12*\n\nCreateBook\x12\x05.Book\x1a\x13.CreateBookResponse\"\x00\x12.\n\x07GetBook\x12\x0f.GetBookRequest\x1a\x10.GetBookResponse\"\x00\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'inventoryService_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _INVENTORYSERVICE._serialized_start=43
-  _INVENTORYSERVICE._serialized_end=146
+  _CREATEBOOKRESPONSE._serialized_start=38
+  _CREATEBOOKRESPONSE._serialized_end=75
+  _GETBOOKREQUEST._serialized_start=77
+  _GETBOOKREQUEST._serialized_end=107
+  _GETBOOKRESPONSE._serialized_start=109
+  _GETBOOKRESPONSE._serialized_end=164
+  _INVENTORYSERVICE._serialized_start=166
+  _INVENTORYSERVICE._serialized_end=276
 # @@protoc_insertion_point(module_scope)
