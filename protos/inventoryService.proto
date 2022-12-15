@@ -4,8 +4,13 @@ import "book.proto";
 
 // RPCs of inventory service
 service InventoryService {
-    rpc CreateBook (Book) returns (CreateBookResponse) {}
+    rpc CreateBook (CreateBookRequest) returns (CreateBookResponse) {}
     rpc GetBook (GetBookRequest) returns (GetBookResponse) {}
+}
+
+// request type of CreateBook RPC
+message CreateBookRequest {
+    Book book = 1;
 }
 
 // response type of CreateBook RPC

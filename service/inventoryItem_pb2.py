@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 import book_pb2 as book__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13inventoryItem.proto\x1a\nbook.proto\"a\n\rInventoryItem\x12\x17\n\x0finventoryNumber\x18\x01 \x01(\x05\x12\x15\n\x04\x62ook\x18\x02 \x01(\x0b\x32\x05.BookH\x00\x12\x17\n\x06status\x18\x03 \x01(\x0e\x32\x07.StatusB\x07\n\x05items*F\n\x06Status\x12\x14\n\x10STATUS_UNDEFINED\x10\x00\x12\x14\n\x10STATUS_AVAILABLE\x10\x01\x12\x10\n\x0cSTATUS_TAKEN\x10\x02\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13inventoryItem.proto\x1a\nbook.proto\"a\n\rInventoryItem\x12\x17\n\x0finventoryNumber\x18\x01 \x01(\t\x12\x15\n\x04\x62ook\x18\x02 \x01(\x0b\x32\x05.BookH\x00\x12\x17\n\x06status\x18\x03 \x01(\x0e\x32\x07.StatusB\x07\n\x05items*F\n\x06Status\x12\x14\n\x10STATUS_UNDEFINED\x10\x00\x12\x14\n\x10STATUS_AVAILABLE\x10\x01\x12\x10\n\x0cSTATUS_TAKEN\x10\x02\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'inventoryItem_pb2', globals())

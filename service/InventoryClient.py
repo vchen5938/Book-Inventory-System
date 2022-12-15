@@ -19,7 +19,9 @@ class InventoryClient:
         with grpc.insecure_channel(self.serverURL) as channel:
             stub = inventoryService_pb2_grpc.InventoryServiceStub(channel)
             try:
-                response = stub.CreateBook(book_pb2.Book(ISBN="978-3-16-148410-5", title="The Curious Incident of the Dog in the Night-Time", author="Mark Haddon", genre=book_pb2.GENRE_FANTASY, publishingYear=1995))
+                book = book_pb2.Book(ISBN="978-3-16-148410-5", title="The Curious Incident of the Dog in the Night-Time", author="Mark Haddon", genre=book_pb2.GENRE_FANTASY, publishingYear=1995)
+
+                response = stub.CreateBook(inventoryService_pb2.CreateBookRequest(book=book))
 
                 print(response)
 

@@ -11,7 +11,7 @@ enum Status {
 
 message InventoryItem {
     // inventory number of the item
-    int32 inventoryNumber = 1;
+    string inventoryNumber = 1;
     // type of inventory item
     oneof items {
         Book book = 2;
