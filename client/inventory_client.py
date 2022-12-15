@@ -10,7 +10,28 @@ import InventoryServer as server
 
 class InventoryClient:
     def __init__(self):
-        self.serverURL = server.SERVER_URL
+        channel = grpc.insecure_channel(server.SERVER_URL)
+        self.stub = service.InventoryServiceStub(channel)
+
+    def createBook(self, book):
+        """Creates desired book
+
+        Parameters
+        ----------
+        book : book to be created
+
+        Returns
+        ------
+        Successful response with message
+        """
+
+        try:
+            response = self.stub.CreateBook(inventoryService.CreateBookRequest(book=book))
+        except grpc.RpcError as e:
+            print(e.details())
+            return
+
+        return response
 
     def getBook(self, ISBN):
         """Retrieves book info based on a given ISBN
@@ -24,12 +45,10 @@ class InventoryClient:
         details of desired book
         """
 
-        with grpc.insecure_channel(self.serverURL) as channel:
-            stub = service.InventoryServiceStub(channel)
-            try:
-                response = stub.GetBook(inventoryService.GetBookRequest(ISBN=ISBN))
-            except grpc.RpcError as e:
-                print(e.details())
-                return
+        try:
+            response = self.stub.GetBook(inventoryService.GetBookRequest(ISBN=ISBN))
+        except grpc.RpcError as e:
+            print(e.details())
+            return
 
-            return response.book
+        return response.book
