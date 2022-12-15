@@ -5,6 +5,12 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class CreateBookRequest(_message.Message):
+    __slots__ = ["book"]
+    BOOK_FIELD_NUMBER: _ClassVar[int]
+    book: _book_pb2.Book
+    def __init__(self, book: _Optional[_Union[_book_pb2.Book, _Mapping]] = ...) -> None: ...
+
 class CreateBookResponse(_message.Message):
     __slots__ = ["message"]
     MESSAGE_FIELD_NUMBER: _ClassVar[int]

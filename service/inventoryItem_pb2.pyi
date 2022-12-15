@@ -15,9 +15,9 @@ class InventoryItem(_message.Message):
     INVENTORYNUMBER_FIELD_NUMBER: _ClassVar[int]
     STATUS_FIELD_NUMBER: _ClassVar[int]
     book: _book_pb2.Book
-    inventoryNumber: int
+    inventoryNumber: str
     status: Status
-    def __init__(self, inventoryNumber: _Optional[int] = ..., book: _Optional[_Union[_book_pb2.Book, _Mapping]] = ..., status: _Optional[_Union[Status, str]] = ...) -> None: ...
+    def __init__(self, inventoryNumber: _Optional[str] = ..., book: _Optional[_Union[_book_pb2.Book, _Mapping]] = ..., status: _Optional[_Union[Status, str]] = ...) -> None: ...
 
 class Status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = []

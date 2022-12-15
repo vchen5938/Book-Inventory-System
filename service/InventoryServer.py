@@ -23,6 +23,8 @@ class InventoryService(inventoryService_pb2_grpc.InventoryServiceServicer):
         Successful response with message
         """
 
+        request = request.book
+
         # check for invalid ISBN
         if request.ISBN == "":
             context.set_details("Book's ISBN is invalid!!!")
